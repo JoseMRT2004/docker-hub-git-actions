@@ -7,22 +7,25 @@
   <meta name="description" content="DevOps Engineer — Automating infrastructure, building solutions, breaking barriers.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     /* ============================================
        DESIGN TOKENS
        ============================================ */
     :root {
-      --bg: #0A0F1A;
-      --surface: #111827;
-      --text: #E2E8F0;
-      --muted: #64748B;
-      --accent: #10B981;
-      --accent-dim: #059669;
-      --border: #1E293B;
-      --font-display: 'Space Grotesk', sans-serif;
-      --font-body: 'Inter', sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
+      --bg: #0C0C0C;
+      --surface: #111111;
+      --surface-2: #1A1A1A;
+      --border: #2A2A2A;
+      --text: #E0E0E0;
+      --muted: #666666;
+      --accent: #00FF41;
+      --accent-dim: #00CC33;
+      --accent-glow: rgba(0, 255, 65, 0.15);
+      --red: #FF3333;
+      --yellow: #FFCC00;
+      --cyan: #00D4FF;
+      --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
     }
 
     /* ============================================
@@ -35,15 +38,15 @@
     }
 
     html {
-      font-size: 16px;
+      font-size: 14px;
       scroll-behavior: smooth;
     }
 
     body {
-      font-family: var(--font-body);
+      font-family: var(--font-mono);
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.7;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
@@ -51,169 +54,123 @@
     a {
       color: var(--accent);
       text-decoration: none;
-      transition: color 0.2s ease;
+      transition: color 0.15s ease;
     }
 
     a:hover {
-      color: #34D399;
+      color: #33FF66;
+      text-shadow: 0 0 8px var(--accent-glow);
     }
 
-    /* Focus states for accessibility */
     a:focus-visible,
     button:focus-visible {
-      outline: 2px solid var(--accent);
+      outline: 1px solid var(--accent);
       outline-offset: 2px;
-      border-radius: 2px;
     }
 
-    /* Reduced motion */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
       }
-      .typing-text::after {
-        display: none;
-      }
-      .typing-text {
-        visibility: visible;
-      }
+      .cursor-blink { display: none; }
     }
 
     /* ============================================
-       LAYOUT
+       SCANLINE OVERLAY
        ============================================ */
-    .container {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    /* ============================================
-       NAV
-       ============================================ */
-    .nav {
+    body::before {
+      content: '';
       position: fixed;
       top: 0;
       left: 0;
-      right: 0;
-      z-index: 100;
-      background: rgba(10, 15, 26, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-inner {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 0 24px;
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav-name {
-      font-family: var(--font-mono);
-      font-size: 0.875rem;
-      color: var(--text);
-      font-weight: 500;
-    }
-
-    .nav-name span {
-      color: var(--accent);
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 32px;
-    }
-
-    .nav-links a {
-      font-family: var(--font-body);
-      font-size: 0.875rem;
-      color: var(--muted);
-      font-weight: 400;
-      transition: color 0.2s ease;
-    }
-
-    .nav-links a:hover {
-      color: var(--text);
-    }
-
-    .nav-cv {
-      font-family: var(--font-mono) !important;
-      font-size: 0.8125rem !important;
-      color: var(--accent) !important;
-      border: 1px solid var(--border);
-      padding: 6px 14px;
-      border-radius: 6px;
-      transition: all 0.2s ease;
-    }
-
-    .nav-cv:hover {
-      background: var(--accent);
-      color: var(--bg) !important;
-      border-color: var(--accent);
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 9999;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.03) 0px,
+        rgba(0, 0, 0, 0.03) 1px,
+        transparent 1px,
+        transparent 2px
+      );
     }
 
     /* ============================================
-       HERO
+       TERMINAL WINDOW
        ============================================ */
-    .hero {
-      min-height: 100vh;
+    .terminal-window {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* ============================================
+       TOP BAR
+       ============================================ */
+    .top-bar {
       display: flex;
       align-items: center;
-      padding-top: 64px;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
     }
 
-    .hero-content {
-      width: 100%;
+    .top-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
 
-    .hero-eyebrow {
-      font-family: var(--font-mono);
-      font-size: 0.875rem;
-      color: var(--accent);
-      margin-bottom: 16px;
-      letter-spacing: 0.05em;
+    .dots {
+      display: flex;
+      gap: 6px;
     }
 
-    .hero-name {
-      font-family: var(--font-display);
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.1;
-      margin-bottom: 8px;
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
     }
 
-    .hero-title {
-      font-family: var(--font-display);
-      font-size: clamp(1.25rem, 3vw, 1.75rem);
+    .dot-red { background: #FF5F56; }
+    .dot-yellow { background: #FFBD2E; }
+    .dot-green { background: #27C93F; }
+
+    .top-bar-title {
+      color: var(--muted);
+      font-size: 0.8rem;
       font-weight: 400;
+    }
+
+    .top-bar-right {
+      display: flex;
+      gap: 16px;
+    }
+
+    .top-bar-right a {
       color: var(--muted);
-      margin-bottom: 32px;
+      font-size: 0.75rem;
+      font-weight: 400;
+      transition: color 0.15s ease;
     }
 
-    .hero-tagline {
-      font-family: var(--font-mono);
-      font-size: 1rem;
-      color: var(--muted);
-      margin-bottom: 40px;
-      min-height: 1.6em;
-    }
-
-    .typing-text {
-      color: var(--text);
-    }
-
-    .typing-text::after {
-      content: '|';
+    .top-bar-right a:hover {
       color: var(--accent);
+    }
+
+    /* ============================================
+       CURSOR
+       ============================================ */
+    .cursor-blink {
+      display: inline-block;
+      width: 8px;
+      height: 1.1em;
+      background: var(--accent);
+      vertical-align: text-bottom;
       animation: blink 1s step-end infinite;
     }
 
@@ -222,110 +179,175 @@
       50% { opacity: 0; }
     }
 
+    /* ============================================
+       PROMPT
+       ============================================ */
+    .prompt {
+      color: var(--accent);
+      user-select: none;
+    }
+
+    .prompt-user {
+      color: var(--cyan);
+    }
+
+    .prompt-path {
+      color: var(--yellow);
+    }
+
+    .prompt-symbol {
+      color: var(--muted);
+    }
+
+    .cmd {
+      color: var(--text);
+    }
+
+    .comment {
+      color: var(--muted);
+    }
+
+    .flag {
+      color: var(--cyan);
+    }
+
+    .string {
+      color: var(--yellow);
+    }
+
+    /* ============================================
+       HERO
+       ============================================ */
+    .hero {
+      padding: 48px 0 64px;
+    }
+
+    .hero-line {
+      margin-bottom: 6px;
+      min-height: 1.7em;
+    }
+
+    .hero-name {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
+      margin: 12px 0 8px;
+    }
+
+    .hero-role {
+      color: var(--muted);
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .hero-tagline {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin: 16px 0 32px;
+      min-height: 1.5em;
+    }
+
+    .typing-text {
+      color: var(--text);
+    }
+
     .hero-actions {
       display: flex;
-      gap: 16px;
+      gap: 12px;
       flex-wrap: wrap;
+      margin-top: 32px;
     }
 
     .btn {
       font-family: var(--font-mono);
-      font-size: 0.875rem;
-      padding: 12px 24px;
-      border-radius: 8px;
+      font-size: 0.8rem;
+      padding: 10px 20px;
+      border-radius: 4px;
       cursor: pointer;
-      transition: all 0.2s ease;
-      border: none;
+      transition: all 0.15s ease;
+      border: 1px solid var(--border);
       display: inline-flex;
       align-items: center;
       gap: 8px;
+      background: transparent;
+      color: var(--text);
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 12px var(--accent-glow);
     }
 
     .btn-primary {
-      background: var(--accent);
-      color: var(--bg);
-      font-weight: 500;
+      border-color: var(--accent);
+      color: var(--accent);
     }
 
     .btn-primary:hover {
-      background: #34D399;
+      background: var(--accent);
       color: var(--bg);
     }
 
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-
-    .btn-secondary:hover {
-      border-color: var(--muted);
-      color: var(--text);
-    }
-
     /* ============================================
-       SECTION (shared)
+       SECTIONS
        ============================================ */
     .section {
-      padding: 96px 0;
+      padding: 48px 0;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 32px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
     }
 
     .section-label {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 12px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 400;
     }
 
-    .section-title {
-      font-family: var(--font-display);
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 48px;
+    .section-label::before {
+      content: '# ';
+      color: var(--muted);
     }
 
     /* ============================================
        SKILLS
        ============================================ */
-    .skills-grid {
+    .skills-list {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 8px;
     }
 
-    .skill-card {
-      background: var(--surface);
+    .skill-item {
+      padding: 12px 16px;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 20px;
-      transition: border-color 0.2s ease;
+      border-radius: 4px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
     }
 
-    .skill-card:hover {
+    .skill-item:hover {
       border-color: var(--accent);
-    }
-
-    .skill-icon {
-      width: 32px;
-      height: 32px;
-      margin-bottom: 12px;
-      color: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
     }
 
     .skill-name {
-      font-family: var(--font-mono);
-      font-size: 0.875rem;
-      color: var(--text);
+      color: var(--accent);
+      font-size: 0.85rem;
       font-weight: 500;
       margin-bottom: 4px;
     }
 
     .skill-desc {
-      font-size: 0.8125rem;
       color: var(--muted);
+      font-size: 0.75rem;
       line-height: 1.5;
     }
 
@@ -335,13 +357,13 @@
     .timeline {
       display: flex;
       flex-direction: column;
-      gap: 32px;
+      gap: 24px;
     }
 
     .timeline-item {
+      padding: 16px 20px;
       border-left: 2px solid var(--border);
-      padding-left: 24px;
-      transition: border-color 0.2s ease;
+      transition: border-color 0.15s ease;
     }
 
     .timeline-item:hover {
@@ -349,63 +371,90 @@
     }
 
     .timeline-role {
-      font-family: var(--font-display);
-      font-size: 1.125rem;
+      color: var(--accent);
+      font-size: 0.9rem;
       font-weight: 600;
-      color: var(--text);
       margin-bottom: 4px;
     }
 
     .timeline-meta {
-      font-family: var(--font-mono);
-      font-size: 0.8125rem;
       color: var(--muted);
+      font-size: 0.75rem;
       margin-bottom: 8px;
     }
 
     .timeline-desc {
-      font-size: 0.9375rem;
-      color: var(--muted);
+      color: var(--text);
+      font-size: 0.8rem;
       line-height: 1.6;
+      margin-bottom: 12px;
     }
 
     .timeline-tech {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      margin-top: 12px;
     }
 
     .tech-tag {
-      font-family: var(--font-mono);
-      font-size: 0.6875rem;
+      font-size: 0.7rem;
       color: var(--accent);
-      background: rgba(16, 185, 129, 0.08);
-      border: 1px solid rgba(16, 185, 129, 0.15);
+      background: rgba(0, 255, 65, 0.06);
+      border: 1px solid rgba(0, 255, 65, 0.12);
       padding: 2px 8px;
-      border-radius: 4px;
+      border-radius: 3px;
     }
 
     /* ============================================
-       CTA
+       CONTACT / SOCIALS
        ============================================ */
-    .cta {
-      text-align: center;
-      padding: 96px 0;
+    .socials {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 8px;
     }
 
-    .cta-title {
-      font-family: var(--font-display);
-      font-size: clamp(1.5rem, 4vw, 2rem);
-      font-weight: 600;
+    .social-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
       color: var(--text);
-      margin-bottom: 16px;
+      font-size: 0.8rem;
     }
 
-    .cta-subtitle {
-      font-size: 1rem;
+    .social-item:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+      color: var(--accent);
+    }
+
+    .social-item svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
       color: var(--muted);
-      margin-bottom: 32px;
+    }
+
+    .social-item:hover svg {
+      color: var(--accent);
+    }
+
+    .social-label {
+      color: var(--muted);
+      font-size: 0.7rem;
+    }
+
+    .social-handle {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .social-item:hover .social-handle {
+      color: var(--accent);
     }
 
     /* ============================================
@@ -413,7 +462,8 @@
        ============================================ */
     .footer {
       border-top: 1px solid var(--border);
-      padding: 32px 0;
+      padding: 24px 0;
+      margin-top: 48px;
     }
 
     .footer-inner {
@@ -421,27 +471,26 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 12px;
     }
 
     .footer-copy {
-      font-size: 0.8125rem;
+      font-size: 0.75rem;
       color: var(--muted);
     }
 
     .footer-links {
       display: flex;
-      gap: 24px;
+      gap: 20px;
     }
 
     .footer-links a {
-      font-size: 0.875rem;
+      font-size: 0.75rem;
       color: var(--muted);
-      transition: color 0.2s ease;
     }
 
     .footer-links a:hover {
-      color: var(--text);
+      color: var(--accent);
     }
 
     /* ============================================
@@ -449,8 +498,8 @@
        ============================================ */
     .reveal {
       opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 0.4s ease, transform 0.4s ease;
+      transform: translateY(8px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
     .reveal.visible {
@@ -462,20 +511,20 @@
        RESPONSIVE
        ============================================ */
     @media (max-width: 768px) {
-      .nav-links {
-        gap: 20px;
+      .terminal-window {
+        padding: 16px;
       }
 
-      .nav-links a:not(.nav-cv) {
+      .top-bar-right {
         display: none;
       }
 
-      .section {
-        padding: 64px 0;
+      .skills-list {
+        grid-template-columns: 1fr;
       }
 
-      .skills-grid {
-        grid-template-columns: repeat(2, 1fr);
+      .socials {
+        grid-template-columns: 1fr;
       }
 
       .hero-actions {
@@ -485,13 +534,17 @@
       .btn {
         justify-content: center;
       }
+
+      .section {
+        padding: 32px 0;
+      }
+
+      .hero {
+        padding: 32px 0 48px;
+      }
     }
 
     @media (max-width: 480px) {
-      .skills-grid {
-        grid-template-columns: 1fr;
-      }
-
       .footer-inner {
         flex-direction: column;
         text-align: center;
@@ -501,100 +554,98 @@
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav class="nav">
-    <div class="nav-inner">
-      <div class="nav-name"><span>~</span>/JoseMRT2004</div>
-      <div class="nav-links">
-        <a href="#skills">Skills</a>
-        <a href="#experience">Experience</a>
-        <a href="JoseMTaveras_CV.pdf" download class="nav-cv">CV ↓</a>
-      </div>
-    </div>
-  </nav>
+  <div class="terminal-window">
 
-  <!-- HERO -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-content">
-        <div class="hero-eyebrow">DevOps Engineer</div>
-        <h1 class="hero-name">Jose M. Taveras</h1>
-        <p class="hero-title">Software Developer — DevOps</p>
-        <p class="hero-tagline">
-          <span class="typing-text" id="typing"></span>
-        </p>
-        <div class="hero-actions">
-          <a href="JoseMTaveras_CV.pdf" download class="btn btn-primary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            Download CV
-          </a>
-          <a href="https://github.com/JoseMRT2004" target="_blank" rel="noopener" class="btn btn-secondary">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-            GitHub
-          </a>
+    <!-- TOP BAR -->
+    <div class="top-bar">
+      <div class="top-bar-left">
+        <div class="dots">
+          <div class="dot dot-red"></div>
+          <div class="dot dot-yellow"></div>
+          <div class="dot dot-green"></div>
         </div>
+        <span class="top-bar-title">jose@devops ~ portfolio</span>
+      </div>
+      <div class="top-bar-right">
+        <a href="#skills">skills</a>
+        <a href="#experience">experience</a>
+        <a href="#contact">contact</a>
+        <a href="JoseMTaveras_CV.pdf" download>cv.pdf</a>
       </div>
     </div>
-  </section>
 
-  <!-- SKILLS -->
-  <section class="section" id="skills">
-    <div class="container">
-      <div class="reveal">
-        <div class="section-label">Skills</div>
-        <h2 class="section-title">Tech Stack</h2>
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-line">
+        <span class="prompt-user">jose</span><span class="prompt-symbol">@</span><span class="prompt-user">devops</span><span class="prompt-symbol">:</span><span class="prompt-path">~</span><span class="prompt-symbol">$ </span><span class="cmd">cat ./about.md</span>
       </div>
-      <div class="skills-grid">
-        <div class="skill-card reveal">
-          <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+      <div class="hero-line">
+        <span class="comment"># Jose M. Taveras</span>
+      </div>
+      <h1 class="hero-name">DevOps Engineer</h1>
+      <div class="hero-line hero-role">
+        <span class="flag">Software Developer</span> <span class="comment">·</span> <span class="flag">ITLA</span> <span class="comment">·</span> <span class="flag">GeekClub Leader</span>
+      </div>
+      <div class="hero-tagline">
+        <span class="typing-text" id="typing"></span><span class="cursor-blink"></span>
+      </div>
+      <div class="hero-actions">
+        <a href="JoseMTaveras_CV.pdf" download class="btn btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          cv.pdf
+        </a>
+        <a href="https://github.com/JoseMRT2004" target="_blank" rel="noopener" class="btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          github
+        </a>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section" id="skills">
+      <div class="section-header reveal">
+        <span class="section-label">skills</span>
+      </div>
+      <div class="skills-list">
+        <div class="skill-item reveal">
           <div class="skill-name">Docker</div>
-          <div class="skill-desc">Containers, images, compose</div>
+          <div class="skill-desc">Containers, images, compose, orchestration</div>
         </div>
-        <div class="skill-card reveal">
-          <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        <div class="skill-item reveal">
           <div class="skill-name">Linux</div>
-          <div class="skill-desc">Administration, scripting, networking</div>
+          <div class="skill-desc">Administration, networking, shell scripting</div>
         </div>
-        <div class="skill-card reveal">
-          <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        <div class="skill-item reveal">
           <div class="skill-name">CI/CD</div>
           <div class="skill-desc">GitHub Actions, automated pipelines</div>
         </div>
-        <div class="skill-card reveal">
-          <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/></svg>
+        <div class="skill-item reveal">
           <div class="skill-name">Git</div>
-          <div class="skill-desc">Version control, branching, PRs</div>
+          <div class="skill-desc">Version control, branching, PRs, collaboration</div>
         </div>
-        <div class="skill-card reveal">
-          <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+        <div class="skill-item reveal">
           <div class="skill-name">Python</div>
-          <div class="skill-desc">Automation, scripting, APIs</div>
+          <div class="skill-desc">Automation, scripting, APIs, AI/ML</div>
         </div>
-        <div class="skill-card reveal">
-          <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <div class="skill-item reveal">
           <div class="skill-name">Bash</div>
-          <div class="skill-desc">Shell scripting, automation</div>
+          <div class="skill-desc">Shell scripting, automation, system tools</div>
         </div>
-        <div class="skill-card reveal">
-          <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <div class="skill-item reveal">
           <div class="skill-name">Ansible</div>
           <div class="skill-desc">Configuration management, playbooks</div>
         </div>
-        <div class="skill-card reveal">
-          <svg class="skill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+        <div class="skill-item reveal">
           <div class="skill-name">Vagrant</div>
           <div class="skill-desc">VM provisioning, dev environments</div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- EXPERIENCE -->
-  <section class="section" id="experience">
-    <div class="container">
-      <div class="reveal">
-        <div class="section-label">Experience</div>
-        <h2 class="section-title">Where I've Worked</h2>
+    <!-- EXPERIENCE -->
+    <section class="section" id="experience">
+      <div class="section-header reveal">
+        <span class="section-label">experience</span>
       </div>
       <div class="timeline">
         <div class="timeline-item reveal">
@@ -638,40 +689,51 @@
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- CTA -->
-  <section class="cta">
-    <div class="container reveal">
-      <h2 class="cta-title">Interested in working together?</h2>
-      <p class="cta-subtitle">Download my CV or reach out on GitHub.</p>
-      <div class="hero-actions" style="justify-content: center;">
-        <a href="JoseMTaveras_CV.pdf" download class="btn btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download CV
+    <!-- CONTACT -->
+    <section class="section" id="contact">
+      <div class="section-header reveal">
+        <span class="section-label">contact</span>
+      </div>
+      <div class="socials">
+        <a href="https://github.com/JoseMRT2004" target="_blank" rel="noopener" class="social-item reveal">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+          <div>
+            <div class="social-label">GitHub</div>
+            <div class="social-handle">@JoseMRT2004</div>
+          </div>
         </a>
-        <a href="https://github.com/JoseMRT2004" target="_blank" rel="noopener" class="btn btn-secondary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          GitHub
+        <a href="https://linkedin.com/in/jose-m-taveras-reyes" target="_blank" rel="noopener" class="social-item reveal">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+          <div>
+            <div class="social-label">LinkedIn</div>
+            <div class="social-handle">jose-m-taveras-reyes</div>
+          </div>
+        </a>
+        <a href="https://tiktok.com/@_name_.dev" target="_blank" rel="noopener" class="social-item reveal">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg>
+          <div>
+            <div class="social-label">TikTok</div>
+            <div class="social-handle">@_name_.dev</div>
+          </div>
         </a>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container">
+    <!-- FOOTER -->
+    <footer class="footer">
       <div class="footer-inner">
-        <div class="footer-copy">© 2025 Jose M. Taveras</div>
+        <div class="footer-copy">
+          <span class="comment"># </span>2025 Jose M. Taveras · Built with <span style="color: var(--red);">♥</span> and a terminal
+        </div>
         <div class="footer-links">
-          <a href="https://github.com/JoseMRT2004" target="_blank" rel="noopener">GitHub</a>
-          <a href="https://linkedin.com/in/jose-m-taveras-reyes" target="_blank" rel="noopener">LinkedIn</a>
-          <a href="https://instagram.com/_name_.deb" target="_blank" rel="noopener">Instagram</a>
+          <a href="JoseMTaveras_CV.pdf" download>cv.pdf</a>
         </div>
       </div>
-    </div>
-  </footer>
+    </footer>
+
+  </div>
 
   <!-- SCRIPTS -->
   <script>
@@ -708,7 +770,7 @@
             setTimeout(type, 400);
             return;
           }
-          setTimeout(type, 30);
+          setTimeout(type, 25);
         } else {
           el.textContent = current.substring(0, charIndex + 1);
           charIndex++;
@@ -718,7 +780,7 @@
             setTimeout(type, 0);
             return;
           }
-          setTimeout(type, 60);
+          setTimeout(type, 50);
         }
       }
 
