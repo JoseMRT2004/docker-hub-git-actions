@@ -1,4 +1,4 @@
-# DevOps Landing Page
+# DevOps Landing Page | [![Build & Deploy](https://github.com/JoseMRT2004/docker-hub-git-actions/actions/workflows/deploy.yml/badge.svg?branch=main&event=workflow_run)](https://github.com/JoseMRT2004/docker-hub-git-actions/actions/workflows/deploy.yml)
 
 Jose M. Taveras — Software Developer · DevOps
 
