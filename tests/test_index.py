@@ -16,6 +16,7 @@ WORKFLOW = ROOT / ".github" / "workflows" / "deploy.yml"
 
 HTML = INDEX.read_text(encoding="utf-8")
 CSS = STYLESHEET.read_text(encoding="utf-8")
+APP_JS = (ROOT / "assets" / "app.js").read_text(encoding="utf-8")
 YML = WORKFLOW.read_text(encoding="utf-8")
 
 # Prose assertions run against whitespace-normalized markup so that
@@ -122,6 +123,12 @@ def test_social_links_present():
 def test_styles_extracted_from_html():
     assert "<style>" not in HTML, "CSS must live in assets/styles.css, not inline"
     assert 'href="assets/styles.css"' in HTML
+
+
+def test_behavior_extracted_from_html():
+    assert "<script>" not in HTML, "JS must live in assets/app.js, not inline"
+    assert 'src="assets/app.js"' in HTML
+    assert "Automating infrastructure..." in APP_JS
 
 
 def test_stylesheet_keeps_design_tokens_and_is_pruned():
