@@ -1,6 +1,6 @@
 # DevOps Landing Page
 
-Landing page personal de Jose M. Taveras — Software Dev. | DevOps.
+Jose M. Taveras — Software Developer · DevOps
 
 ## Deploy automático
 
@@ -13,7 +13,7 @@ Cada push a `main` ejecuta:
 ## Secrets necesarios en GitHub
 
 | Secret | Descripción |
-|--------|-------------|
+| -------- | ------------- |
 | `DOCKER_USERNAME` | Usuario de Docker Hub |
 | `DOCKER_PASSWORD` | Token de Docker Hub |
 | `RENDER_API_KEY` | API key de Render |
@@ -36,4 +36,4 @@ docker build -t devops-landing .
 docker run -p 8080:80 devops-landing
 ```
 
-Abrí http://localhost:8080
+Abrí <http://localhost:8080>
