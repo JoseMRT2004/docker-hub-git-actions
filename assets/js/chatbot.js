@@ -12,7 +12,7 @@
 (function () {
   'use strict';
 
-  var EMAIL = 'mrtaveras.19@gmail.com';
+  var EMAIL = 'josemtaverasreyes@gmail.com';
   var MAIL_SUBJECT = 'Portfolio inquiry — Jose M. Taveras';
   var MAIL_DEFAULT_BODY = "Hi Jose, I found your portfolio and I'd like to get in touch.";
 
@@ -64,11 +64,11 @@
     },
     {
       keywords: ['contact', 'hire', 'email', 'reach', 'work with', 'job', 'employ', 'contacto', 'contratar', 'correo'],
-      answer: 'To contact or hire Jose, email mrtaveras.19@gmail.com (button below) or reach him on:',
+      answer: 'To contact or hire Jose, email josemtaverasreyes@gmail.com (button below) or reach him on:',
       items: [
         'GitHub — @JoseMRT2004',
         'LinkedIn — jose-m-taveras-reyes',
-        'TikTok — @_name_.dev'
+        'Email — josemtaverasreyes@gmail.com'
       ],
       offerEmail: true
     },

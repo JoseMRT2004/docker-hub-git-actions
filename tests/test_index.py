@@ -75,7 +75,7 @@ def test_all_local_references_resolve():
     local = [
         r.split("#")[0]
         for r in refs
-        if not r.startswith(("http://", "https://", "#"))
+        if not r.startswith(("http://", "https://", "#", "mailto:"))
     ]
     assert local, "expected at least one local asset reference"
     for ref in local:
@@ -97,7 +97,7 @@ def test_icon_sprite_is_embedded_and_referenced():
     # external .svg file (which breaks in some contexts). Symbols are defined
     # inline and referenced via <use href="#icon-x">.
     assert "assets/img/icons.svg" not in HTML, "external sprite file reference removed"
-    for icon in ("icon-github", "icon-linkedin", "icon-tiktok", "icon-download"):
+    for icon in ("icon-github", "icon-linkedin", "icon-email", "icon-download"):
         assert f'<symbol id="{icon}"' in HTML, f"sprite missing symbol: {icon}"
         assert f'href="#{icon}"' in HTML, f"icon not used: {icon}"
 
@@ -107,10 +107,10 @@ def test_no_inline_icon_paths_in_markup():
     # and reused via <use>; they are never duplicated inline at each use site.
     assert HTML.count("6.626 0-12 5.373-12 12 0 5.302") == 1, "octocat path must appear once (sprite symbol)"
     assert HTML.count("20.447 20.452h-3.554") == 1, "linkedin path must appear once"
-    assert HTML.count("12.525.02c1.31-.02") == 1, "tiktok path must appear once"
+    assert HTML.count("M20 4H4a2 2") == 1, "email path must appear once (sprite symbol)"
     assert HTML.count('href="#icon-github"') == 2, "github used via <use> (hero + contact)"
     assert HTML.count('href="#icon-linkedin"') == 1
-    assert HTML.count('href="#icon-tiktok"') == 1
+    assert HTML.count('href="#icon-email"') == 1
     assert HTML.count('href="#icon-download"') == 1
 
 
@@ -153,9 +153,16 @@ def test_social_links_present():
     for url in (
         "github.com/JoseMRT2004",
         "linkedin.com/in/jose-m-taveras-reyes",
-        "tiktok.com/@_name_.dev",
+        "mailto:josemtaverasreyes@gmail.com",
     ):
         assert url in HTML
+
+
+def test_tiktok_removed_from_contact():
+    # TikTok was replaced by an Email/mailto contact per the owner's request.
+    assert "tiktok.com/@_name_.dev" not in HTML
+    assert "icon-tiktok" not in HTML
+    assert "TikTok" not in HTML
 
 
 # --- Separation of concerns ---------------------------------------------
@@ -323,17 +330,100 @@ def test_section_order_experience_before_skills():
     hero = HTML.index("id=\"hero\"") if "id=\"hero\"" in HTML else HTML.index("hero-name")
     exp = HTML.index("id=\"experience\"")
     skills = HTML.index("id=\"skills\"")
+    certs = HTML.index("id=\"certifications\"")
     posts = HTML.index("id=\"posts\"")
     contact = HTML.index("id=\"contact\"")
-    assert hero < exp < skills < posts < contact
+    assert hero < exp < skills < certs < posts < contact
     # nav order matches too
     assert HTML.index("href=\"#experience\"") < HTML.index("href=\"#skills\"")
+    assert HTML.index("href=\"#skills\"") < HTML.index("href=\"#certifications\"") < HTML.index("href=\"#contact\"")
 
 
-def test_favicon_references_avatar_option():
+def test_favicon_references_avatar_icon():
     assert 'rel="icon"' in HTML
-    assert 'href="assets/img/options/avatar-option.png"' in HTML
-    assert (ROOT / "assets" / "img" / "options" / "avatar-option.png").is_file()
+    assert 'href="assets/img/options/avatar-icon.webp"' in HTML
+    assert 'type="image/webp"' in HTML
+    assert (ROOT / "assets" / "img" / "options" / "avatar-icon.webp").is_file()
+
+
+# --- Certifications -----------------------------------------------------
+
+CERTS_IMAGES = [
+    "assets/img/certs/samsung.webp",
+    "assets/img/certs/python-essentials.webp",
+    "assets/img/certs/pre-security.webp",
+    "assets/img/certs/it-essentials.webp",
+    "assets/img/certs/ethical-hacking.webp",
+    "assets/img/certs/linux.webp",
+    "assets/img/certs/os-basics.webp",
+    "assets/img/certs/microsoft-learn.webp",
+    "assets/img/certs/plan-agile.webp",
+    "assets/img/certs/branch-strategies.webp",
+    "assets/img/certs/manage-repositories.webp",
+]
+
+
+def test_certifications_section_exists():
+    assert 'id="certifications"' in HTML
+    assert "certs-grid" in HTML
+    assert HTML.count("cert-item") >= 8
+
+
+def test_all_cert_images_referenced_and_resolve():
+    for img in CERTS_IMAGES:
+        assert f'src="{img}"' in HTML, f"cert image not referenced: {img}"
+        assert (ROOT / img).is_file(), f"cert image missing from repo: {img}"
+
+
+def test_cert_images_are_lazy_loaded():
+    for img in CERTS_IMAGES:
+        idx = HTML.index(f'src="{img}"')
+        before = HTML[:idx]
+        tag_start = before.rindex("<img")
+        tag_end = HTML.index(">", idx)
+        tag = HTML[tag_start:tag_end]
+        assert 'loading="lazy"' in tag, f"not lazy-loaded: {img}"
+
+
+def test_cert_hover_focus_grows_hovered_card():
+    # Hovering the grid blurs neighbours; the hovered cert snaps back sharp,
+    # and a large floating preview renders the certificate at "photo size".
+    grid_hover = CSS.split(".certs-grid:hover .cert-item img")[1].split("}")[0]
+    assert "blur(1.5px)" in grid_hover
+    active = CSS.split(".certs-grid:hover .cert-item:hover img")[1].split("}")[0]
+    assert "blur(0)" in active and "scale(" in active
+    # A floating preview shows the full cert at photo size on hover.
+    assert ".cert-preview" in CSS
+    assert ".cert-item:hover .cert-preview" in CSS
+    assert "cert-preview-img" in HTML
+
+
+def test_ms_certificates_spin_clockwise_on_hover():
+    # Microsoft Learn certs spin a full clockwise (360°) circle on hover.
+    assert '.cert-item[data-cert-name^="cert.ms_"]:hover img' in CSS
+    assert "@keyframes certMsSpin" in CSS
+    assert "rotate(360deg)" in CSS
+
+
+def test_snake_pointer_points_at_chatbot():
+    # The "serpentine" pointer is fixed, curls toward the chat bubble and
+    # carries a small "pregúntame" tag sized to half the chatbot's "#".
+    assert 'class="cert-pointer"' in HTML
+    assert 'class="cert-pointer-snake"' in HTML
+    assert 'class="snake-path"' in HTML
+    assert 'class="snake-arrow"' in HTML
+    assert "pregúntame" in HTML
+    assert "cert-pointer-tag" in CSS
+    # fixed toward the chat bubble (bottom-right)
+    assert "position: fixed" in CSS.split(".cert-pointer {")[1].split("}")[0]
+    # tag font-size is half of the chatbot prompt's 0.8rem
+    assert "font-size: 0.4rem" in CSS.split(".cert-pointer-tag")[1].split("}")[0]
+
+
+def test_cert_i18n_keys_present():
+    for key in ("nav.certifications", "cert.label", "cert.samsung", "cert.cisco_python",
+                "cert.ms_agile", "cert.ms_branch", "cert.ms_repos", "cert.ms_learn"):
+        assert f'data-i18n="{key}"' in HTML or f"'{key}'" in I18N_JS, f"missing i18n key: {key}"
 
 
 def test_stylesheet_keeps_design_tokens_and_is_pruned():
@@ -361,7 +451,7 @@ def test_chatbot_script_has_rules_and_mailto_fallback():
     assert "FAQ" in CHATBOT_JS
     assert "keywords" in CHATBOT_JS
     assert "mailto:" in CHATBOT_JS
-    assert "mrtaveras.19@gmail.com" in CHATBOT_JS
+    assert "josemtaverasreyes@gmail.com" in CHATBOT_JS
 
 
 def test_chatbot_has_at_least_six_faq_rules():

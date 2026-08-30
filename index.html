@@ -12,7 +12,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Fira+Code:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
-  <link rel="icon" type="image/png" href="assets/img/options/avatar-option.png">
+  <link rel="icon" type="image/webp" href="assets/img/options/avatar-icon.webp">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
@@ -27,8 +27,8 @@
     <symbol id="icon-linkedin" viewBox="0 0 24 24">
       <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
     </symbol>
-    <symbol id="icon-tiktok" viewBox="0 0 24 24">
-      <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+    <symbol id="icon-email" viewBox="0 0 24 24">
+      <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4.236a1 1 0 0 1-.432.82l-7 4.667a1 1 0 0 1-1.136 0l-7-4.667A1 1 0 0 1 4 8.236V6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2.236z"/>
     </symbol>
     <symbol id="icon-download" viewBox="0 0 24 24">
       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -52,6 +52,7 @@
       <div class="top-bar-right">
         <a href="#experience" data-i18n="nav.experience">experience</a>
         <a href="#skills" data-i18n="nav.skills">skills</a>
+        <a href="#certifications" data-i18n="nav.certifications">certifications</a>
         <a href="#contact" data-i18n="nav.contact">contact</a>
         <a href="JoseMTaveras_CV.pdf" download data-i18n="nav.cv">cv.pdf</a>
       </div>
@@ -109,6 +110,17 @@
     </div>
     <div class="timeline">
       <div class="timeline-item reveal">
+        <div class="timeline-role" data-i18n="exp.samsung.role">Developer · DevOps — Samsung Innovation Campus</div>
+        <div class="timeline-meta">2025 · Remote</div>
+        <div class="timeline-desc" data-i18n="exp.samsung.desc">Collaborated with people from around the world on AI and Python projects. Handled
+          documentation, version control systems, and CI integration.</div>
+        <div class="timeline-tech">
+          <span class="tech-tag">Python</span>
+          <span class="tech-tag">AI/ML</span>
+          <span class="tech-tag">CI/CD</span>
+        </div>
+      </div>
+      <div class="timeline-item reveal">
         <div class="timeline-role" data-i18n="exp.geekclub.role">Community Leader — GeekClub</div>
         <div class="timeline-meta">Jan 2024 – Present · Hybrid</div>
         <div class="timeline-desc" data-i18n="exp.geekclub.desc">Lead a 90+ member tech community focused on open source. Organize weekly events,
@@ -129,17 +141,6 @@
           <span class="tech-tag">Bash</span>
           <span class="tech-tag">GitHub CLI</span>
           <span class="tech-tag">Git</span>
-        </div>
-      </div>
-      <div class="timeline-item reveal">
-        <div class="timeline-role" data-i18n="exp.samsung.role">Developer · DevOps — Samsung Innovation Campus</div>
-        <div class="timeline-meta">2025 · Remote</div>
-        <div class="timeline-desc" data-i18n="exp.samsung.desc">Collaborated with people from around the world on AI and Python projects. Handled
-          documentation, version control systems, and CI integration.</div>
-        <div class="timeline-tech">
-          <span class="tech-tag">Python</span>
-          <span class="tech-tag">AI/ML</span>
-          <span class="tech-tag">CI/CD</span>
         </div>
       </div>
       <div class="timeline-item reveal">
@@ -200,6 +201,139 @@
         <div class="skill-desc" data-i18n="skill.github">Version control, branching, PRs, collaboration, GitHub Projects, GitHub Secrets
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- CERTIFICATIONS -->
+  <section class="section" id="certifications">
+    <div class="section-header reveal">
+      <span class="section-label" data-i18n="cert.label">certifications</span>
+    </div>
+
+    <!-- Snake pointer: a serpentine dashed line that curls toward the chat
+         bubble and carries a small "pregúntame" tag so the chatbot gets noticed. -->
+    <div class="cert-pointer" role="presentation" aria-hidden="true">
+      <svg class="cert-pointer-snake" viewBox="0 0 260 130" preserveAspectRatio="none">
+        <path class="snake-path" d="M18 22
+          C 48 8, 80 6, 108 26
+          S 150 60, 190 56
+          S 240 54, 254 84" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <path class="snake-arrow" d="M254 84 l -22 -4 m 22 4 l -6 -20" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="cert-pointer-tag"><span class="cert-pointer-prompt">#</span> pregúntame <span class="cert-pointer-blink">▍</span></span>
+    </div>
+
+    <div class="certs-grid" aria-label="Certifications">
+      <button class="cert-item reveal" type="button" title="Samsung Innovation Campus — AI &amp; Python"
+        data-cert-img="assets/img/certs/samsung.webp" data-cert-name="cert.samsung">
+        <img src="assets/img/certs/samsung.webp" alt="Samsung Innovation Campus — AI &amp; Python" loading="lazy">
+        <span class="cert-name" data-i18n="cert.samsung">Samsung AI &amp; Python</span>
+      
+        <div class="cert-preview" aria-hidden="true">
+          <img class="cert-preview-img" src="assets/img/certs/samsung.webp" alt="" loading="lazy">
+          <span class="cert-preview-name">Samsung AI &amp; Python</span>
+        </div>
+      </button>
+      <button class="cert-item reveal" type="button" title="Cisco — Python Essentials 1"
+        data-cert-img="assets/img/certs/python-essentials.webp" data-cert-name="cert.cisco_python">
+        <img src="assets/img/certs/python-essentials.webp" alt="Cisco — Python Essentials 1" loading="lazy">
+        <span class="cert-name" data-i18n="cert.cisco_python">Python Essentials 1</span>
+      
+        <div class="cert-preview" aria-hidden="true">
+          <img class="cert-preview-img" src="assets/img/certs/python-essentials.webp" alt="" loading="lazy">
+          <span class="cert-preview-name">Python Essentials 1</span>
+        </div>
+      </button>
+      <button class="cert-item reveal" type="button" title="TryHackMe — Pre Security"
+        data-cert-img="assets/img/certs/pre-security.webp" data-cert-name="cert.tryhackme">
+        <img src="assets/img/certs/pre-security.webp" alt="TryHackMe — Pre Security" loading="lazy">
+        <span class="cert-name" data-i18n="cert.tryhackme">Pre Security</span>
+      
+        <div class="cert-preview" aria-hidden="true">
+          <img class="cert-preview-img" src="assets/img/certs/pre-security.webp" alt="" loading="lazy">
+          <span class="cert-preview-name">Pre Security</span>
+        </div>
+      </button>
+      <button class="cert-item reveal" type="button" title="Cisco — IT Essentials"
+        data-cert-img="assets/img/certs/it-essentials.webp" data-cert-name="cert.cisco_it">
+        <img src="assets/img/certs/it-essentials.webp" alt="Cisco — IT Essentials" loading="lazy">
+        <span class="cert-name" data-i18n="cert.cisco_it">IT Essentials</span>
+      
+        <div class="cert-preview" aria-hidden="true">
+          <img class="cert-preview-img" src="assets/img/certs/it-essentials.webp" alt="" loading="lazy">
+          <span class="cert-preview-name">IT Essentials</span>
+        </div>
+      </button>
+      <button class="cert-item reveal" type="button" title="ITLA — Ethical Hacking"
+        data-cert-img="assets/img/certs/ethical-hacking.webp" data-cert-name="cert.itla">
+        <img src="assets/img/certs/ethical-hacking.webp" alt="ITLA — Ethical Hacking" loading="lazy">
+        <span class="cert-name" data-i18n="cert.itla">Ethical Hacking</span>
+      
+        <div class="cert-preview" aria-hidden="true">
+          <img class="cert-preview-img" src="assets/img/certs/ethical-hacking.webp" alt="" loading="lazy">
+          <span class="cert-preview-name">Ethical Hacking</span>
+        </div>
+      </button>
+      <button class="cert-item reveal" type="button" title="Cisco — Linux Unhatched"
+        data-cert-img="assets/img/certs/linux.webp" data-cert-name="cert.cisco_linux">
+        <img src="assets/img/certs/linux.webp" alt="Cisco — Linux Unhatched" loading="lazy">
+        <span class="cert-name" data-i18n="cert.cisco_linux">Linux Unhatched</span>
+      
+        <div class="cert-preview" aria-hidden="true">
+          <img class="cert-preview-img" src="assets/img/certs/linux.webp" alt="" loading="lazy">
+          <span class="cert-preview-name">Linux Unhatched</span>
+        </div>
+      </button>
+      <button class="cert-item reveal" type="button" title="Cisco — Operating Systems Basics"
+        data-cert-img="assets/img/certs/os-basics.webp" data-cert-name="cert.cisco_os">
+        <img src="assets/img/certs/os-basics.webp" alt="Cisco — Operating Systems Basics" loading="lazy">
+        <span class="cert-name" data-i18n="cert.cisco_os">OS Basics</span>
+      
+        <div class="cert-preview" aria-hidden="true">
+          <img class="cert-preview-img" src="assets/img/certs/os-basics.webp" alt="" loading="lazy">
+          <span class="cert-preview-name">OS Basics</span>
+        </div>
+      </button>
+      <button class="cert-item reveal" type="button" title="Microsoft Learn — Plan foster inner source"
+        data-cert-img="assets/img/certs/microsoft-learn.webp" data-cert-name="cert.ms_learn">
+        <img src="assets/img/certs/microsoft-learn.webp" alt="Microsoft Learn — Plan foster inner source" loading="lazy">
+        <span class="cert-name" data-i18n="cert.ms_learn">Microsoft Learn</span>
+      
+        <div class="cert-preview" aria-hidden="true">
+          <img class="cert-preview-img" src="assets/img/certs/microsoft-learn.webp" alt="" loading="lazy">
+          <span class="cert-preview-name">Microsoft Learn</span>
+        </div>
+      </button>
+      <button class="cert-item reveal" type="button" title="Microsoft Learn — Plan Agile (Azure Boards)"
+        data-cert-img="assets/img/certs/plan-agile.webp" data-cert-name="cert.ms_agile">
+        <img src="assets/img/certs/plan-agile.webp" alt="Microsoft Learn — Plan Agile with GitHub Projects and Azure Boards" loading="lazy">
+        <span class="cert-name" data-i18n="cert.ms_agile">Plan Agile</span>
+      
+        <div class="cert-preview" aria-hidden="true">
+          <img class="cert-preview-img" src="assets/img/certs/plan-agile.webp" alt="" loading="lazy">
+          <span class="cert-preview-name">Plan Agile</span>
+        </div>
+      </button>
+      <button class="cert-item reveal" type="button" title="Microsoft Learn — Branch Strategies"
+        data-cert-img="assets/img/certs/branch-strategies.webp" data-cert-name="cert.ms_branch">
+        <img src="assets/img/certs/branch-strategies.webp" alt="Microsoft Learn — Design and implement branch strategies and workflows" loading="lazy">
+        <span class="cert-name" data-i18n="cert.ms_branch">Branch Strategies</span>
+      
+        <div class="cert-preview" aria-hidden="true">
+          <img class="cert-preview-img" src="assets/img/certs/branch-strategies.webp" alt="" loading="lazy">
+          <span class="cert-preview-name">Branch Strategies</span>
+        </div>
+      </button>
+      <button class="cert-item reveal" type="button" title="Microsoft Learn — Manage Repositories"
+        data-cert-img="assets/img/certs/manage-repositories.webp" data-cert-name="cert.ms_repos">
+        <img src="assets/img/certs/manage-repositories.webp" alt="Microsoft Learn — Manage and configure repositories" loading="lazy">
+        <span class="cert-name" data-i18n="cert.ms_repos">Manage Repositories</span>
+      
+        <div class="cert-preview" aria-hidden="true">
+          <img class="cert-preview-img" src="assets/img/certs/manage-repositories.webp" alt="" loading="lazy">
+          <span class="cert-preview-name">Manage Repositories</span>
+        </div>
+      </button>
     </div>
   </section>
 
@@ -264,13 +398,13 @@
           <div class="social-handle">jose-m-taveras-reyes</div>
         </div>
       </a>
-      <a href="https://tiktok.com/@_name_.dev" target="_blank" rel="noopener" class="social-item reveal">
+      <a href="mailto:josemtaverasreyes@gmail.com" target="_blank" rel="noopener" class="social-item reveal">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <use href="#icon-tiktok"></use>
+          <use href="#icon-email"></use>
         </svg>
         <div>
-          <div class="social-label">TikTok</div>
-          <div class="social-handle">@_name_.dev</div>
+          <div class="social-label" data-i18n="social.email">Email</div>
+          <div class="social-handle">josemtaverasreyes@gmail.com</div>
         </div>
       </a>
       </div>
@@ -310,6 +444,15 @@
         placeholder="ask anything..." aria-label="Type your question">
       <button type="submit" class="chatbot-send" aria-label="Send">&crarr;</button>
     </form>
+  </div>
+
+  <!-- CERT LIGHTBOX -->
+  <div id="cert-lightbox" class="cert-lightbox" role="dialog" aria-modal="true" aria-label="Certificate view" hidden>
+    <button type="button" id="cert-lightbox-close" class="cert-lightbox-close" aria-label="Close">&times;</button>
+    <figure class="cert-lightbox-figure">
+      <img id="cert-lightbox-img" src="" alt="">
+      <figcaption id="cert-lightbox-caption" class="cert-lightbox-caption"></figcaption>
+    </figure>
   </div>
 
   <!-- SCRIPTS -->

@@ -68,3 +68,39 @@
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 })();
 
+// Certificate lightbox — click a cert thumbnail to see it at full size.
+(function () {
+  const lightbox = document.getElementById('cert-lightbox');
+  const img = document.getElementById('cert-lightbox-img');
+  const caption = document.getElementById('cert-lightbox-caption');
+  const close = document.getElementById('cert-lightbox-close');
+  if (!lightbox || !img || !caption || !close) return;
+
+  function openLightbox(btn) {
+    img.src = btn.dataset.certImg;
+    img.alt = btn.title;
+    const name = btn.querySelector('.cert-name');
+    caption.textContent = name ? name.textContent : btn.title;
+    lightbox.hidden = false;
+    document.body.classList.add('lightbox-open');
+    close.focus();
+  }
+
+  function closeLightbox() {
+    lightbox.hidden = true;
+    img.removeAttribute('src');
+    document.body.classList.remove('lightbox-open');
+  }
+
+  document.querySelectorAll('.cert-item').forEach(function (btn) {
+    btn.addEventListener('click', function () { openLightbox(btn); });
+  });
+  close.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', function (e) {
+    if (e.target === lightbox) closeLightbox();
+  });
+  document.addEventListener('keydown', function (e) {
+    if (!lightbox.hidden && e.key === 'Escape') closeLightbox();
+  });
+})();
+
