@@ -283,13 +283,15 @@ def test_posts_enter_from_directed_sides_with_stagger():
     assert ":nth-child(4) { transition-delay: 0.36s" in CSS
 
 
-def test_post_hover_has_glow_and_blur():
-    # Hover "sun": the frame glows (avatar-pulse) and the photo goes softly
-    # blurred with a subtle zoom.
+def test_post_hover_focus_blurs_others_and_keys_hovered():
+    # Hover "focus": hovering the grid blurs all photos; the hovered one snaps
+    # back sharp with the avatar-pulse glow on its frame.
+    grid_hover = CSS.split(".posts-grid:hover .post-img")[1].split("}")[0]
+    assert "blur(4px)" in grid_hover
+    active = CSS.split(".posts-grid:hover .post-item:hover .post-img")[1].split("}")[0]
+    assert "blur(0)" in active and "scale(" in active
     hover_frame = CSS.split(".post-item:hover .post-frame")[1].split("}")[0]
     assert "box-shadow" in hover_frame and "avatar-pulse" in hover_frame
-    hover_img = CSS.split(".post-item:hover .post-img")[1].split("}")[0]
-    assert "blur" in hover_img and "scale(" in hover_img
     assert "avatar-pulse" in CSS
 
 
