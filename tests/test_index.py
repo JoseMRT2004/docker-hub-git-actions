@@ -10,13 +10,13 @@ import re
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 INDEX = ROOT / "index.html"
-STYLESHEET = ROOT / "assets" / "styles.css"
+STYLESHEET = ROOT / "assets" / "css" / "styles.css"
 DOCKERFILE = ROOT / "Dockerfile"
 WORKFLOW = ROOT / ".github" / "workflows" / "deploy.yml"
 
 HTML = INDEX.read_text(encoding="utf-8")
 CSS = STYLESHEET.read_text(encoding="utf-8")
-APP_JS = (ROOT / "assets" / "app.js").read_text(encoding="utf-8")
+APP_JS = (ROOT / "assets" / "js" / "app.js").read_text(encoding="utf-8")
 YML = WORKFLOW.read_text(encoding="utf-8")
 
 # Prose assertions run against whitespace-normalized markup so that
@@ -46,12 +46,12 @@ def test_role_line_appends_devops():
 # --- Assets ------------------------------------------------------------
 
 def test_avatar_assets_exist_and_are_referenced():
-    base = ROOT / "assets" / "avatar.png"
-    full = ROOT / "assets" / "avatar-full.png"
+    base = ROOT / "assets" / "img" / "avatars" / "avatar.jpeg"
+    full = ROOT / "assets" / "img" / "avatars" / "avatar-full.jpeg"
     assert base.is_file(), "base avatar missing from repo"
     assert full.is_file(), "full hover avatar missing from repo"
-    assert 'src="assets/avatar.png"' in HTML
-    assert 'src="assets/avatar-full.png"' in HTML
+    assert 'src="assets/img/avatars/avatar.jpeg"' in HTML
+    assert 'src="assets/img/avatars/avatar-full.jpeg"' in HTML
 
 
 def test_base_avatar_has_alt_text():
@@ -121,14 +121,26 @@ def test_social_links_present():
 # --- Separation of concerns ---------------------------------------------
 
 def test_styles_extracted_from_html():
-    assert "<style>" not in HTML, "CSS must live in assets/styles.css, not inline"
-    assert 'href="assets/styles.css"' in HTML
+    assert "<style>" not in HTML, "CSS must live in assets/css/styles.css, not inline"
+    assert 'href="assets/css/styles.css"' in HTML
 
 
 def test_behavior_extracted_from_html():
-    assert "<script>" not in HTML, "JS must live in assets/app.js, not inline"
-    assert 'src="assets/app.js"' in HTML
+    assert "<script>" not in HTML, "JS must live in assets/js/app.js, not inline"
+    assert 'src="assets/js/app.js"' in HTML
     assert "Automating infrastructure..." in APP_JS
+
+
+def test_dom_balance():
+    opens = HTML.count("<div")
+    closes = HTML.count("</div>")
+    assert opens == closes, f"div mismatch: {opens} opens, {closes} closes"
+
+
+def test_favicon_references_avatar_option():
+    assert 'rel="icon"' in HTML
+    assert 'href="assets/img/options/avatar-option.png"' in HTML
+    assert (ROOT / "assets" / "img" / "options" / "avatar-option.png").is_file()
 
 
 def test_stylesheet_keeps_design_tokens_and_is_pruned():
