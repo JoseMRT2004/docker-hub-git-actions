@@ -17,6 +17,7 @@ WORKFLOW = ROOT / ".github" / "workflows" / "deploy.yml"
 HTML = INDEX.read_text(encoding="utf-8")
 CSS = STYLESHEET.read_text(encoding="utf-8")
 APP_JS = (ROOT / "assets" / "js" / "app.js").read_text(encoding="utf-8")
+CHATBOT_JS = (ROOT / "assets" / "js" / "chatbot.js").read_text(encoding="utf-8")
 YML = WORKFLOW.read_text(encoding="utf-8")
 
 # Prose assertions run against whitespace-normalized markup so that
@@ -185,6 +186,40 @@ def test_stylesheet_keeps_design_tokens_and_is_pruned():
     assert ":root {" in CSS and "--accent:" in CSS
     assert ".prompt {" not in CSS
     assert ".string {" not in CSS
+
+
+# --- FAQ chatbot -------------------------------------------------
+
+def test_chatbot_script_exists_and_is_referenced():
+    assert (ROOT / "assets" / "js" / "chatbot.js").is_file()
+    assert 'src="assets/js/chatbot.js"' in HTML
+
+
+def test_chatbot_markup_present():
+    assert 'id="chatbot-toggle"' in HTML
+    assert 'id="chatbot-panel"' in HTML
+    assert 'id="chatbot-log"' in HTML
+    assert 'id="chatbot-input"' in HTML
+    assert 'id="chatbot-close"' in HTML
+
+
+def test_chatbot_script_has_rules_and_mailto_fallback():
+    assert "FAQ" in CHATBOT_JS
+    assert "keywords" in CHATBOT_JS
+    assert "mailto:" in CHATBOT_JS
+    assert "mrtaveras.19@gmail.com" in CHATBOT_JS
+
+
+def test_chatbot_has_at_least_six_faq_rules():
+    assert CHATBOT_JS.count("keywords: [") >= 6
+
+
+def test_chatbot_styles_use_design_tokens():
+    assert ".chatbot-toggle {" in CSS
+    assert ".chatbot-panel {" in CSS
+    assert "z-index: 9000" in CSS
+    assert "var(--accent)" in CSS
+    assert "var(--surface)" in CSS
 
 
 # --- Pipeline ------------------------------------------------------------
