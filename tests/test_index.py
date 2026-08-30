@@ -406,20 +406,16 @@ def test_ms_certificates_spin_clockwise_on_hover():
 
 
 def test_snake_pointer_points_at_chatbot():
-    # The "serpentine" pointer is fixed, curls toward the chat bubble and
-    # carries two red "??" sized at least 30px (2rem = 32px).
+    # The "serpentine" pointer is fixed and curls toward the chat bubble —
+    # a clean dashed guide line, no text tag.
     assert 'class="cert-pointer"' in HTML
     assert 'class="cert-pointer-snake"' in HTML
     assert 'class="snake-path"' in HTML
     assert 'class="snake-arrow"' in HTML
-    assert "??" in HTML
-    assert "cert-pointer-tag" in CSS
+    assert "cert-pointer-tag" not in HTML
+    assert "cert-pointer-tag" not in CSS
     # fixed toward the chat bubble (bottom-right)
     assert "position: fixed" in CSS.split(".cert-pointer {")[1].split("}")[0]
-    # question marks are red and at least 30px (2rem = 32px)
-    tag_css = CSS.split(".cert-pointer-tag")[1].split("}")[0]
-    assert "font-size: 2rem" in tag_css
-    assert "color: var(--red)" in tag_css
 
 
 def test_cert_pointer_hides_on_scroll():
