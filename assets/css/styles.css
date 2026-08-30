@@ -537,6 +537,37 @@
       box-shadow: 0 0 14px var(--accent-glow);
     }
 
+    /* Certifications are a collapsible <details>: hidden by default, the
+       grid fades in when the reader opens the "courses" panel. */
+    .certs-details summary {
+      list-style: none;
+      cursor: pointer;
+      user-select: none;
+      margin-bottom: 20px;
+    }
+
+    .certs-details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .certs-details summary::after {
+      content: ' ▸';
+      opacity: 0.7;
+    }
+
+    .certs-details[open] summary::after {
+      content: ' ▾';
+    }
+
+    .certs-details[open] .certs-grid {
+      animation: certsFadeIn 0.25s ease;
+    }
+
+    @keyframes certsFadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     /* Large floating preview shown on hover -- the certificate renders at
        "photo size" (like the posts) so it is easy to read, never a tiny crop.
        position:fixed keeps it centred on screen regardless of grid position. */
@@ -581,11 +612,6 @@
       color: var(--accent);
       font-size: 0.78rem;
       text-align: center;
-    }
-
-    .cert-item:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 2px;
     }
 
     .cert-item:focus-visible {

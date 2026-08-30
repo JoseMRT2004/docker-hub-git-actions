@@ -204,14 +204,16 @@
     </div>
   </section>
 
-  <!-- CERTIFICATIONS -->
+  <!-- CERTIFICATIONS (collapsed by default: <details> keeps the section quiet
+       until the reader opens the "courses" panel) -->
   <section class="section" id="certifications">
-    <div class="section-header reveal">
-      <span class="section-label" data-i18n="cert.label">certifications</span>
-    </div>
+    <details class="certs-details reveal">
+      <summary>
+        <span class="section-label">courses</span>
+      </summary>
 
-    <!-- Snake pointer: a serpentine dashed line that curls toward the chat
-         bubble so the chatbot gets noticed. -->
+      <!-- Snake pointer: a serpentine dashed line that curls toward the chat
+           bubble so the chatbot gets noticed. -->
     <div class="cert-pointer" role="presentation" aria-hidden="true">
       <svg class="cert-pointer-snake" viewBox="0 0 260 130" preserveAspectRatio="none">
         <path class="snake-path" d="M18 22
@@ -324,6 +326,7 @@
         </div>
       </button>
     </div>
+    </details>
   </section>
 
   <!-- POSTS -->

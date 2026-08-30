@@ -368,6 +368,17 @@ def test_certifications_section_exists():
     assert HTML.count("cert-item") >= 8
 
 
+def test_certifications_are_collapsible_details():
+    # The courses hide behind a <details>/<summary> (closed by default) so the
+    # section does not show everything at once; the summary reads "courses".
+    assert "<details" in HTML
+    assert "<summary>" in HTML
+    assert 'class="certs-details' in HTML
+    assert "courses" in HTML
+    # closed by default: the <details> tag carries no `open` attribute
+    assert "open" not in HTML.split("<details")[1].split(">")[0]
+
+
 def test_all_cert_images_referenced_and_resolve():
     for img in CERTS_IMAGES:
         assert f'src="{img}"' in HTML, f"cert image not referenced: {img}"
