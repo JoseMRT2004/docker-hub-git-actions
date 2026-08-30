@@ -33,7 +33,13 @@
       'exp.samsung.role': 'Developer · DevOps — Samsung Innovation Campus',
       'exp.samsung.desc': 'Collaborated with people from around the world on AI and Python projects. Handled documentation, version control systems, and CI integration.',
       'exp.freelance.role': 'Service Assistant — Freelance',
-      'exp.freelance.desc': 'Created automated quotes and technical reports with Python, Excel, and Word. Served multilingual clients (Spanish, English).'
+      'exp.freelance.desc': 'Created automated quotes and technical reports with Python, Excel, and Word. Served multilingual clients (Spanish, English).',
+      'posts.label': 'in the field',
+      'posts.me-teaching': 'Teaching the campus',
+      'posts.news-room': 'News room, Latinoamérica',
+      'posts.semana-global': 'Global Entrepreneurship Week team',
+      'posts.sic-team': 'Samsung Innovation Campus team',
+      'posts.sic-working': 'Working with the SIC team'
     },
     es: {
       'nav.skills': 'habilidades',
@@ -56,7 +62,13 @@
       'exp.samsung.role': 'Desarrollador · DevOps — Samsung Innovation Campus',
       'exp.samsung.desc': 'Colaboré con personas de todo el mundo en proyectos de IA y Python. Manejé documentación, sistemas de control de versiones e integración de CI.',
       'exp.freelance.role': 'Asistente de Servicio — Freelance',
-      'exp.freelance.desc': 'Creé cotizaciones automatizadas e informes técnicos con Python, Excel y Word. Atendí clientes multilingües (español, inglés).'
+      'exp.freelance.desc': 'Creé cotizaciones automatizadas e informes técnicos con Python, Excel y Word. Atendí clientes multilingües (español, inglés).',
+      'posts.label': 'en el campo',
+      'posts.me-teaching': 'Enseñando en el campus',
+      'posts.news-room': 'Sala de prensa, Latinoamérica',
+      'posts.semana-global': 'Equipo de la Semana Global del Emprendimiento',
+      'posts.sic-team': 'Equipo del Samsung Innovation Campus',
+      'posts.sic-working': 'Trabajando con el equipo del SIC'
     }
   };
 

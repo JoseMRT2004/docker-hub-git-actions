@@ -196,6 +196,52 @@ def test_dark_remains_default_fallback():
     assert "--bg: #0C0C0C" in root
 
 
+# --- Posts / field notes ----------------------------------------------
+
+POSTS_IMAGES = [
+    "assets/img/posts/me-teaching-the-campus.webp",
+    "assets/img/posts/news-room.webp",
+    "assets/img/posts/semana-global.webp",
+    "assets/img/posts/sic-team-photo-1.webp",
+    "assets/img/posts/sic-working-team.webp",
+]
+
+
+def test_posts_section_exists():
+    assert 'id="posts"' in HTML
+    assert 'class="posts-grid"' in HTML
+
+
+def test_all_post_images_are_referenced_and_resolve():
+    for img in POSTS_IMAGES:
+        assert f'src="{img}"' in HTML, f"post image not referenced: {img}"
+        assert (ROOT / img).is_file(), f"post image missing from repo: {img}"
+
+
+def test_post_images_are_lazy_loaded():
+    # Every post image should lazy-load for performance.
+    for img in POSTS_IMAGES:
+        idx = HTML.index(f'src="{img}"')
+        # collect the full <img ...> tag and check it carries loading="lazy"
+        before = HTML[:idx]
+        tag_start = before.rindex("<img")
+        tag_end = HTML.index(">", idx)
+        tag = HTML[tag_start:tag_end]
+        assert 'loading="lazy"' in tag, f"not lazy-loaded: {img}"
+
+
+def test_posts_grid_uses_16_9_frames():
+    assert "aspect-ratio: 16 / 9" in CSS
+    assert "object-fit: cover" in CSS
+
+
+def test_large_source_photo_has_compact_webp():
+    # The 3MB source JPG becomes a small WebP for the page.
+    webp = ROOT / "assets" / "img" / "posts" / "sic-team-photo-1.webp"
+    assert webp.is_file()
+    assert webp.stat().st_size < 500_000, "WebP should be far smaller than the 3MB source"
+
+
 def test_dom_balance():
     opens = HTML.count("<div")
     closes = HTML.count("</div>")
