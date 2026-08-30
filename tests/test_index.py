@@ -160,3 +160,21 @@ def test_dockerfile_ships_static_assets():
 def test_workflow_runs_tests_before_docker_build():
     assert "uv run pytest" in YML
     assert "needs: test" in YML
+
+
+def test_workflow_runs_tests_on_pull_requests():
+    # Every PR to main must run the test job, so reviewers get CI feedback.
+    assert "pull_request:" in YML
+    assert "branches: [main]" in YML
+
+
+def test_workflow_never_deploys_from_a_pull_request():
+    # on: triggers are workflow-level; per-job if: guards are what stop PRs
+    # from pushing Docker images or deploying Render. Re-adding pull_request
+    # without these guards would expose secrets and deploy on every branch PR.
+    assert "if: github.event_name == 'push'" in YML
+    # guards must protect BOTH the build and the deploy job.
+    deploy_block = YML[YML.index("deploy-render:"):]
+    assert "if: github.event_name == 'push'" in deploy_block
+    # deploy must never run without a build, so no image ever skips the chain.
+    assert "deploy-render:\n    needs: build-and-push" in YML
