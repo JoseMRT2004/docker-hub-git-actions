@@ -30,31 +30,59 @@
 
   // Ordered most-specific first: the first rule whose ANY keyword is a
   // substring of the lowercased user message wins.
+  // A rule may carry an optional `items` array; when present, it is rendered
+  // as a structured bullet list under the lead answer for easier reading.
   var FAQ = [
     {
       keywords: ['geekclub', 'community leader', 'community', 'leader', 'comunidad'],
-      answer: 'Jose leads GeekClub, a 90+ member tech community focused on open source. He organizes weekly events, workshops, and in-person talks at public schools, managing activities through GitHub, Notion, and Discord.'
+      answer: 'Jose leads GeekClub, a 90+ member tech community focused on open source.',
+      items: [
+        'Organizes weekly events, workshops, and in-person talks at public schools.',
+        'Manages activities through GitHub, Notion, and Discord.',
+        '90+ members and growing.'
+      ]
     },
     {
       keywords: ['oh my bash', 'ohmybash', 'open source'],
-      answer: 'Jose is an Open Source Contributor for Oh My Bash (Feb 2024): he contributed to the official documentation, documenting prompt styles and Git-related plugin functions.'
+      answer: 'Jose is an Open Source Contributor for Oh My Bash (Feb 2024, remote).',
+      items: [
+        'Contributed to the official documentation.',
+        'Documented prompt styles and Git-related plugin functions.'
+      ]
     },
     {
       keywords: ['samsung', 'innovation campus', 'machine learning'],
-      answer: 'As Developer · DevOps at Samsung Innovation Campus (2025, remote), Jose collaborated with people from around the world on AI and Python projects, handling documentation, version control systems, and CI integration.'
+      answer: 'As Developer · DevOps at Samsung Innovation Campus (2025, remote), Jose worked with people from around the world on AI and Python projects.',
+      items: [
+        'Handled documentation and version control systems.',
+        'Integrated CI into project workflows.'
+      ]
     },
     {
       keywords: ['cv', 'resume', 'curriculum', 'hoja de vida', 'pdf'],
-      answer: 'Grab his CV with the cv.pdf button in the top bar, the hero section, or the footer of this page — it downloads JoseMTaveras_CV.pdf.'
+      answer: 'Grab his CV with the cv.pdf button in the top bar, the hero, or the footer of this page — it downloads JoseMTaveras_CV.pdf.'
     },
     {
       keywords: ['contact', 'hire', 'email', 'reach', 'work with', 'job', 'employ', 'contacto', 'contratar', 'correo'],
-      answer: 'To contact or hire Jose, email mrtaveras.19@gmail.com (button below), or reach him on GitHub @JoseMRT2004, LinkedIn (jose-m-taveras-reyes), and TikTok @_name_.dev.',
+      answer: 'To contact or hire Jose, email mrtaveras.19@gmail.com (button below) or reach him on:',
+      items: [
+        'GitHub — @JoseMRT2004',
+        'LinkedIn — jose-m-taveras-reyes',
+        'TikTok — @_name_.dev'
+      ],
       offerEmail: true
     },
     {
       keywords: ['docker', 'linux', 'ci/cd', 'cicd', 'github actions', 'ansible', 'vagrant', 'bash', 'python', 'devops', 'infrastructure', 'automation', 'pipeline', 'stack', 'tools', 'technolog', 'tecnologias'],
-      answer: 'His DevOps stack: Docker for containers, Linux for administration, GitHub Actions for CI/CD, Ansible for configuration management, Vagrant for dev environments, and Python + Bash for automation — all glued together with Git/GitHub.'
+      answer: 'His DevOps stack — everything glued together with Git/GitHub:',
+      items: [
+        'Docker — containers, images, compose, orchestration',
+        'Linux — administration, networking, shell scripting',
+        'GitHub Actions — CI/CD pipelines',
+        'Ansible — configuration management, playbooks',
+        'Vagrant — dev environments and VM provisioning',
+        'Python + Bash — automation and scripting'
+      ]
     },
     {
       keywords: ['skill', 'know', 'sabes', 'saber', 'habilidades'],
@@ -62,7 +90,13 @@
     },
     {
       keywords: ['experience', 'background', 'career', 'history', 'freelance', 'experiencia', 'trayectoria'],
-      answer: 'Experience highlights: Community Leader — GeekClub (90+ member tech community, weekly events and workshops), Open Source Contributor — Oh My Bash (official documentation), Developer · DevOps — Samsung Innovation Campus (AI/Python, version control, CI integration), and Freelance Service Assistant (automated quotes and technical reports with Python, Excel, and Word).'
+      answer: 'Experience highlights:',
+      items: [
+        'Community Leader — GeekClub (90+ member tech community)',
+        'Open Source Contributor — Oh My Bash (official documentation)',
+        'Developer · DevOps — Samsung Innovation Campus (AI/Python, version control, CI)',
+        'Freelance Service Assistant (automated quotes and technical reports)'
+      ]
     },
     {
       keywords: ['whoami', 'who are you', 'who is jose', 'about jose', 'introduce yourself', 'yourself', 'biography', 'sobre jose', 'quien es'],
@@ -116,7 +150,7 @@
       '&body=' + encodeURIComponent(body);
   }
 
-  function addMessage(kind, text, withEmail, userText) {
+  function addMessage(kind, text, withEmail, userText, items) {
     var row = document.createElement('div');
     row.className = 'chatbot-msg chatbot-msg-' + kind;
 
@@ -129,6 +163,18 @@
     body.className = 'chatbot-text';
     body.textContent = text; // textContent: user input is never innerHTML
     row.appendChild(body);
+
+    // Structured bullet list (bot answers only) — built as nodes, never innerHTML.
+    if (kind === 'bot' && items && items.length) {
+      var list = document.createElement('ul');
+      list.className = 'chatbot-bullets';
+      items.forEach(function (item) {
+        var li = document.createElement('li');
+        li.textContent = item;
+        list.appendChild(li);
+      });
+      row.appendChild(list);
+    }
 
     if (withEmail) {
       var actions = document.createElement('div');
@@ -159,7 +205,7 @@
 
     var rule = findRule(text);
     if (rule) {
-      addMessage('bot', rule.answer, rule.offerEmail === true, text);
+      addMessage('bot', rule.answer, rule.offerEmail === true, text, rule.items);
     } else {
       addMessage('bot', FALLBACK, true, text);
     }

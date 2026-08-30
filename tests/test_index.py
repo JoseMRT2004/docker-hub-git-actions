@@ -69,10 +69,40 @@ def test_hover_swaps_base_for_full_avatar():
 
 def test_all_local_references_resolve():
     refs = re.findall(r'(?:src|href)="([^"]+)"', HTML)
-    local = [r for r in refs if not r.startswith(("http://", "https://", "#"))]
+    # Skip external URLs and in-page anchors first, then strip any fragment
+    # (e.g. sprite <use href="icons.svg#icon-x">) so the reference resolves
+    # to the actual file on disk.
+    local = [
+        r.split("#")[0]
+        for r in refs
+        if not r.startswith(("http://", "https://", "#"))
+    ]
     assert local, "expected at least one local asset reference"
     for ref in local:
+        assert ref, "empty local reference after stripping fragment"
         assert (ROOT / ref).is_file(), f"broken local reference: {ref}"
+
+
+def test_icon_svg_sprite_exists_and_is_referenced():
+    # The social/hero icons are pulled from a sprite sheet, not inlined paths.
+    sprite = ROOT / "assets" / "img" / "icons.svg"
+    assert sprite.is_file(), "icon sprite missing from repo"
+    sprite_text = sprite.read_text(encoding="utf-8")
+    for icon in ("icon-github", "icon-linkedin", "icon-tiktok", "icon-download"):
+        assert f'id="{icon}"' in sprite_text, f"sprite missing symbol: {icon}"
+        assert f'#icon-{icon.split("-", 1)[1]}' in HTML or f"#{icon}" in HTML, f"icon not used: {icon}"
+
+
+def test_no_inline_icon_paths_in_markup():
+    # The big hardcoded icon paths are gone from the markup; icons come from
+    # the sprite via <use>. The GitHub octocat path was the giveaway one.
+    assert "6.626 0-12 5.373-12 12 0 5.302" not in HTML, "GitHub icon path still inlined"
+    assert "20.447 20.452h-3.554" not in HTML, "LinkedIn icon path still inlined"
+    assert "12.525.02c1.31-.02" not in HTML, "TikTok icon path still inlined"
+    assert 'href="assets/img/icons.svg#icon-github"' in HTML
+    assert 'href="assets/img/icons.svg#icon-linkedin"' in HTML
+    assert 'href="assets/img/icons.svg#icon-tiktok"' in HTML
+    assert 'href="assets/img/icons.svg#icon-download"' in HTML
 
 
 # --- CV download -------------------------------------------------------
@@ -203,13 +233,19 @@ POSTS_IMAGES = [
     "assets/img/posts/news-room.webp",
     "assets/img/posts/semana-global.webp",
     "assets/img/posts/sic-team-photo-1.webp",
-    "assets/img/posts/sic-working-team.webp",
 ]
 
 
 def test_posts_section_exists():
     assert 'id="posts"' in HTML
     assert 'class="posts-grid"' in HTML
+
+
+def test_removed_photo_is_not_referenced_or_shipped():
+    # The user asked to drop the sic-working-team photo entirely.
+    assert "sic-working-team" not in HTML
+    assert not (ROOT / "assets/img/posts/sic-working-team.webp").exists()
+    assert not (ROOT / "assets/img/posts/sic-working-team.jpg").exists()
 
 
 def test_all_post_images_are_referenced_and_resolve():
@@ -235,6 +271,28 @@ def test_posts_grid_uses_16_9_frames():
     assert "object-fit: cover" in CSS
 
 
+def test_posts_enter_from_directed_sides_with_stagger():
+    # Each post animates in from a direction and the grid staggers the reveal.
+    for var in ("post-item--left", "post-item--right", "post-item--up"):
+        assert var in HTML_NORM, f"missing directed entry variant: {var}"
+        assert CSS.split(var)[1].split("}")[0].strip(), f"{var} has no styles"
+    # laid out in the grid (class present on post items)
+    assert HTML_NORM.count("post-item--") >= 4
+    # stagger via nth-child transition-delay in the stylesheet
+    assert ":nth-child(1) { transition-delay: 0.00s" in CSS
+    assert ":nth-child(4) { transition-delay: 0.36s" in CSS
+
+
+def test_post_hover_has_glow_and_blur():
+    # Hover "sun": the frame glows (avatar-pulse) and the photo goes softly
+    # blurred with a subtle zoom.
+    hover_frame = CSS.split(".post-item:hover .post-frame")[1].split("}")[0]
+    assert "box-shadow" in hover_frame and "avatar-pulse" in hover_frame
+    hover_img = CSS.split(".post-item:hover .post-img")[1].split("}")[0]
+    assert "blur" in hover_img and "scale(" in hover_img
+    assert "avatar-pulse" in CSS
+
+
 def test_large_source_photo_has_compact_webp():
     # The 3MB source JPG becomes a small WebP for the page.
     webp = ROOT / "assets" / "img" / "posts" / "sic-team-photo-1.webp"
@@ -246,6 +304,19 @@ def test_dom_balance():
     opens = HTML.count("<div")
     closes = HTML.count("</div>")
     assert opens == closes, f"div mismatch: {opens} opens, {closes} closes"
+
+
+def test_section_order_experience_before_skills():
+    # "Primero la experiencia": experience must appear right after the hero,
+    # before skills. Assert by index in the markup.
+    hero = HTML.index("id=\"hero\"") if "id=\"hero\"" in HTML else HTML.index("hero-name")
+    exp = HTML.index("id=\"experience\"")
+    skills = HTML.index("id=\"skills\"")
+    posts = HTML.index("id=\"posts\"")
+    contact = HTML.index("id=\"contact\"")
+    assert hero < exp < skills < posts < contact
+    # nav order matches too
+    assert HTML.index("href=\"#experience\"") < HTML.index("href=\"#skills\"")
 
 
 def test_favicon_references_avatar_option():
@@ -284,6 +355,24 @@ def test_chatbot_script_has_rules_and_mailto_fallback():
 
 def test_chatbot_has_at_least_six_faq_rules():
     assert CHATBOT_JS.count("keywords: [") >= 6
+
+
+def test_chatbot_answers_use_structured_bullets():
+    # "Formato más entendible": several rules render bullet lists, which are
+    # built as nodes (textContent), never innerHTML.
+    assert CHATBOT_JS.count("items: [") >= 3
+    assert "chatbot-bullets" in CHATBOT_JS
+    assert "document.createElement('ul')" in CHATBOT_JS
+    assert "li.textContent = item" in CHATBOT_JS
+    # Never assign innerHTML (comments may mention the word; the code must not
+    # use it to inject user input).
+    assert "innerHTML =" not in CHATBOT_JS
+
+
+def test_chatbot_bullet_styles_use_palette():
+    assert ".chatbot-bullets li::before {" in CSS
+    assert "var(--cyan)" in CSS
+    assert "var(--accent)" in CSS
 
 
 def test_chatbot_styles_use_design_tokens():
