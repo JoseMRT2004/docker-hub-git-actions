@@ -242,9 +242,31 @@
 
   </div>
 
+  <!-- CHATBOT -->
+  <button type="button" id="chatbot-toggle" class="chatbot-toggle" aria-label="Open chat" aria-expanded="false"
+    aria-controls="chatbot-panel">
+    <span aria-hidden="true">&gt;_</span>
+  </button>
+
+  <div id="chatbot-panel" class="chatbot-panel" role="dialog" aria-label="Ask about Jose M. Taveras" hidden>
+    <div class="chatbot-header">
+      <span class="chatbot-title"><span class="chatbot-prompt"># </span>ask-jose</span>
+      <button type="button" id="chatbot-close" class="chatbot-close" aria-label="Close chat">&times;</button>
+    </div>
+    <div id="chatbot-log" class="chatbot-log" aria-live="polite"></div>
+    <div id="chatbot-chips" class="chatbot-chips" role="group" aria-label="Quick questions"></div>
+    <form id="chatbot-form" class="chatbot-form">
+      <span class="chatbot-prompt" aria-hidden="true"># </span>
+      <input id="chatbot-input" class="chatbot-input" type="text" autocomplete="off" spellcheck="false"
+        placeholder="ask anything..." aria-label="Type your question">
+      <button type="submit" class="chatbot-send" aria-label="Send">&crarr;</button>
+    </form>
+  </div>
+
   <!-- SCRIPTS -->
   <script src="assets/js/app.js"></script>
   <script src="assets/js/i18n.js"></script>
+  <script src="assets/js/chatbot.js"></script>
 
 </body>
 
