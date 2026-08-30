@@ -351,7 +351,6 @@ def test_favicon_references_avatar_icon():
 CERTS_IMAGES = [
     "assets/img/certs/samsung.webp",
     "assets/img/certs/python-essentials.webp",
-    "assets/img/certs/pre-security.webp",
     "assets/img/certs/it-essentials.webp",
     "assets/img/certs/ethical-hacking.webp",
     "assets/img/certs/linux.webp",

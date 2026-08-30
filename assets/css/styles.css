@@ -603,7 +603,6 @@
     .cert-item:nth-child(8)  { transition-delay: 0.28s; }
     .cert-item:nth-child(9)  { transition-delay: 0.32s; }
     .cert-item:nth-child(10) { transition-delay: 0.36s; }
-    .cert-item:nth-child(11) { transition-delay: 0.40s; }
 
     .cert-item img {
       width: 76px;
