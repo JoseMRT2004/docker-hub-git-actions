@@ -104,3 +104,15 @@
   });
 })();
 
+/* Snake pointer is a scroll-depth hint: fade it out while the user scrolls
+   and bring it back when they return to the top. */
+(function () {
+  var pointer = document.querySelector('.cert-pointer');
+  if (!pointer) return;
+  var toggle = function () {
+    pointer.classList.toggle('cert-pointer--hidden', window.scrollY > 12);
+  };
+  toggle();
+  window.addEventListener('scroll', toggle, { passive: true });
+})();
+
