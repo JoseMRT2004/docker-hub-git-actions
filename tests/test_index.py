@@ -83,26 +83,35 @@ def test_all_local_references_resolve():
         assert (ROOT / ref).is_file(), f"broken local reference: {ref}"
 
 
-def test_icon_svg_sprite_exists_and_is_referenced():
-    # The social/hero icons are pulled from a sprite sheet, not inlined paths.
-    sprite = ROOT / "assets" / "img" / "icons.svg"
-    assert sprite.is_file(), "icon sprite missing from repo"
-    sprite_text = sprite.read_text(encoding="utf-8")
+def test_hero_icon_has_explicit_size():
+    # The hero (cv/github) icons render because .icon defines dimensions; a
+    # sprite <use> inside an SVG with only a viewBox collapses to zero size
+    # without them (the social icons size via .social-item svg instead).
+    assert ".icon {" in CSS
+    icon_block = CSS.split(".icon {")[1].split("}")[0]
+    assert "width" in icon_block and "height" in icon_block
+
+
+def test_icon_sprite_is_embedded_and_referenced():
+    # Icons live in an embedded sprite (renders from file:// and HTTP), not an
+    # external .svg file (which breaks in some contexts). Symbols are defined
+    # inline and referenced via <use href="#icon-x">.
+    assert "assets/img/icons.svg" not in HTML, "external sprite file reference removed"
     for icon in ("icon-github", "icon-linkedin", "icon-tiktok", "icon-download"):
-        assert f'id="{icon}"' in sprite_text, f"sprite missing symbol: {icon}"
-        assert f'#icon-{icon.split("-", 1)[1]}' in HTML or f"#{icon}" in HTML, f"icon not used: {icon}"
+        assert f'<symbol id="{icon}"' in HTML, f"sprite missing symbol: {icon}"
+        assert f'href="#{icon}"' in HTML, f"icon not used: {icon}"
 
 
 def test_no_inline_icon_paths_in_markup():
-    # The big hardcoded icon paths are gone from the markup; icons come from
-    # the sprite via <use>. The GitHub octocat path was the giveaway one.
-    assert "6.626 0-12 5.373-12 12 0 5.302" not in HTML, "GitHub icon path still inlined"
-    assert "20.447 20.452h-3.554" not in HTML, "LinkedIn icon path still inlined"
-    assert "12.525.02c1.31-.02" not in HTML, "TikTok icon path still inlined"
-    assert 'href="assets/img/icons.svg#icon-github"' in HTML
-    assert 'href="assets/img/icons.svg#icon-linkedin"' in HTML
-    assert 'href="assets/img/icons.svg#icon-tiktok"' in HTML
-    assert 'href="assets/img/icons.svg#icon-download"' in HTML
+    # Icon paths are defined exactly once inside the embedded sprite <symbol>s
+    # and reused via <use>; they are never duplicated inline at each use site.
+    assert HTML.count("6.626 0-12 5.373-12 12 0 5.302") == 1, "octocat path must appear once (sprite symbol)"
+    assert HTML.count("20.447 20.452h-3.554") == 1, "linkedin path must appear once"
+    assert HTML.count("12.525.02c1.31-.02") == 1, "tiktok path must appear once"
+    assert HTML.count('href="#icon-github"') == 2, "github used via <use> (hero + contact)"
+    assert HTML.count('href="#icon-linkedin"') == 1
+    assert HTML.count('href="#icon-tiktok"') == 1
+    assert HTML.count('href="#icon-download"') == 1
 
 
 # --- CV download -------------------------------------------------------

@@ -305,6 +305,15 @@
       color: var(--text);
     }
 
+    /* Sprite icon used inside hero buttons. The social icons size themselves
+       via .social-item svg; these need an explicit size so they render. */
+    .icon {
+      width: 14px;
+      height: 14px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
     .btn:hover {
       border-color: var(--accent);
       color: var(--accent);
