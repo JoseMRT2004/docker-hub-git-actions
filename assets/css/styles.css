@@ -10,11 +10,41 @@
       --muted: #666666;
       --accent: #00FF41;
       --accent-dim: #00CC33;
+      --accent-hover: #33FF66;
       --accent-glow: rgba(0, 255, 65, 0.15);
+      --chip-bg: rgba(0, 255, 65, 0.06);
+      --chip-border: rgba(0, 255, 65, 0.12);
+      --chip-border-strong: rgba(0, 255, 65, 0.25);
       --red: #FF3333;
       --yellow: #FFCC00;
       --cyan: #00D4FF;
       --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+      color-scheme: dark;
+    }
+
+    /* Light theme: follows the browser/system preference. The dark terminal
+       tokens above stay the fallback for browsers without media-query or
+       color-scheme support, keeping the matrix aesthetic as the identity. */
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #F4F1EA;
+        --surface: #FFFFFF;
+        --surface-2: #EBE8DF;
+        --border: #D8D3C8;
+        --text: #1A1A1A;
+        --muted: #6B675E;
+        --accent: #008C31;
+        --accent-dim: #007028;
+        --accent-hover: #00591F;
+        --accent-glow: rgba(0, 140, 49, 0.15);
+        --chip-bg: rgba(0, 140, 49, 0.08);
+        --chip-border: rgba(0, 140, 49, 0.18);
+        --chip-border-strong: rgba(0, 140, 49, 0.30);
+        --red: #C2180C;
+        --yellow: #946600;
+        --cyan: #00718F;
+        color-scheme: light;
+      }
     }
 
     /* ============================================
@@ -49,7 +79,7 @@
     }
 
     a:hover {
-      color: #33FF66;
+      color: var(--accent-hover);
       text-shadow: 0 0 8px var(--accent-glow);
     }
 
@@ -504,8 +534,8 @@
     .tech-tag {
       font-size: 0.7rem;
       color: var(--accent);
-      background: rgba(0, 255, 65, 0.06);
-      border: 1px solid rgba(0, 255, 65, 0.12);
+      background: var(--chip-bg);
+      border: 1px solid var(--chip-border);
       padding: 2px 8px;
       border-radius: 3px;
     }
@@ -833,8 +863,8 @@
       font-family: var(--font-mono);
       font-size: 0.7rem;
       color: var(--accent);
-      background: rgba(0, 255, 65, 0.06);
-      border: 1px solid rgba(0, 255, 65, 0.25);
+      background: var(--chip-bg);
+      border: 1px solid var(--chip-border-strong);
       border-radius: 3px;
       padding: 3px 8px;
       cursor: pointer;
