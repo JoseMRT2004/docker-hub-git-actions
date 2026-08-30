@@ -170,6 +170,32 @@ def test_i18n_defaults_to_english_markup():
     assert '<span class="section-label" data-i18n="nav.contact">contact</span>' in HTML
 
 
+# --- Theme (automatic light/dark) -------------------------------------
+
+def test_theme_is_browser_preference_not_a_toggle():
+    # Same philosophy as i18n: the theme follows the browser/system preference.
+    # There must be no visible theme toggle button in the markup.
+    assert "theme-toggle" not in HTML
+    assert "themeSwitch" not in HTML
+
+
+def test_css_detects_system_color_scheme():
+    assert "@media (prefers-color-scheme: light)" in CSS
+
+
+def test_light_block_overrides_key_tokens():
+    light = CSS[CSS.index("@media (prefers-color-scheme: light)"):]
+    light_block = light[:light.index("}")]
+    for token in ("--bg:", "--surface:", "--text:", "--accent:", "--muted:"):
+        assert token in light_block, f"light theme missing token override: {token}"
+
+
+def test_dark_remains_default_fallback():
+    # Dark is the identity and the no-media-query fallback (defined in :root).
+    root = CSS[CSS.index(":root {"):CSS.index("RESET & BASE")]
+    assert "--bg: #0C0C0C" in root
+
+
 def test_dom_balance():
     opens = HTML.count("<div")
     closes = HTML.count("</div>")
