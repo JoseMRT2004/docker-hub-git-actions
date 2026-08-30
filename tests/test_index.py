@@ -28,7 +28,7 @@ HTML_NORM = " ".join(HTML.split())
 # --- Branding and hero -------------------------------------------------
 
 def test_title_matches_new_branding():
-    assert "<title>Jose M. Taveras — Software Dev. | DevOps</title>" in HTML
+    assert "<title>Jose M. Taveras · Software Dev. | DevOps</title>" in HTML
 
 
 def test_hero_shows_name_as_heading():
@@ -416,12 +416,14 @@ def test_ms_certificates_spin_clockwise_on_hover():
 
 
 def test_snake_pointer_points_at_chatbot():
-    # The "serpentine" pointer is fixed and curls toward the chat bubble —
-    # a clean dashed guide line, no text tag.
+    # The "serpentine" pointer is a dashed guide line that curls toward the
+    # chat bubble, ending in an open chevron tip that marks the chat
+    # (restored per owner request).
     assert 'class="cert-pointer"' in HTML
     assert 'class="cert-pointer-snake"' in HTML
     assert 'class="snake-path"' in HTML
     assert 'class="snake-arrow"' in HTML
+    assert ".snake-arrow {" in CSS
     assert "cert-pointer-tag" not in HTML
     assert "cert-pointer-tag" not in CSS
     # fixed toward the chat bubble (bottom-right)

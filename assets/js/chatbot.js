@@ -13,19 +13,19 @@
   'use strict';
 
   var EMAIL = 'josemtaverasreyes@gmail.com';
-  var MAIL_SUBJECT = 'Portfolio inquiry — Jose M. Taveras';
+  var MAIL_SUBJECT = 'Portfolio inquiry · Jose M. Taveras';
   var MAIL_DEFAULT_BODY = "Hi Jose, I found your portfolio and I'd like to get in touch.";
 
   var GREETING =
     "Hi! I'm a terminal-style FAQ bot for Jose M. Taveras's portfolio. " +
     'Ask me about who he is, his DevOps stack, experience, or how to ' +
-    'contact/hire him — or tap a quick question below.';
+    'contact/hire him, or tap a quick question below.';
 
   var FALLBACK =
     "I'm a small rules-based bot, so I didn't catch that. I can answer " +
     'about: who Jose is, his DevOps stack, experience (GeekClub, Oh My ' +
     'Bash, Samsung, freelance), contact & hiring, and the CV (cv.pdf). ' +
-    'For anything else, hit the button below — it opens a mail draft with ' +
+    'For anything else, hit the button below: it opens a mail draft with ' +
     'your message pre-filled.';
 
   // Ordered most-specific first: the first rule whose ANY keyword is a
@@ -60,28 +60,28 @@
     },
     {
       keywords: ['cv', 'resume', 'curriculum', 'hoja de vida', 'pdf'],
-      answer: 'Grab his CV with the cv.pdf button in the top bar, the hero, or the footer of this page — it downloads JoseMTaveras_CV.pdf.'
+      answer: 'Grab his CV with the cv.pdf button in the top bar, the hero, or the footer of this page. It downloads JoseMTaveras_CV.pdf.'
     },
     {
       keywords: ['contact', 'hire', 'email', 'reach', 'work with', 'job', 'employ', 'contacto', 'contratar', 'correo'],
       answer: 'To contact or hire Jose, email josemtaverasreyes@gmail.com (button below) or reach him on:',
       items: [
-        'GitHub — @JoseMRT2004',
-        'LinkedIn — jose-m-taveras-reyes',
-        'Email — josemtaverasreyes@gmail.com'
+        'GitHub · @JoseMRT2004',
+        'LinkedIn · jose-m-taveras-reyes',
+        'Email · josemtaverasreyes@gmail.com'
       ],
       offerEmail: true
     },
     {
       keywords: ['docker', 'linux', 'ci/cd', 'cicd', 'github actions', 'ansible', 'vagrant', 'bash', 'python', 'devops', 'infrastructure', 'automation', 'pipeline', 'stack', 'tools', 'technolog', 'tecnologias'],
-      answer: 'His DevOps stack — everything glued together with Git/GitHub:',
+      answer: 'His DevOps stack. Everything glued together with Git/GitHub:',
       items: [
-        'Docker — containers, images, compose, orchestration',
-        'Linux — administration, networking, shell scripting',
-        'GitHub Actions — CI/CD pipelines',
-        'Ansible — configuration management, playbooks',
-        'Vagrant — dev environments and VM provisioning',
-        'Python + Bash — automation and scripting'
+        'Docker · containers, images, compose, orchestration',
+        'Linux · administration, networking, shell scripting',
+        'GitHub Actions · CI/CD pipelines',
+        'Ansible · configuration management, playbooks',
+        'Vagrant · dev environments and VM provisioning',
+        'Python + Bash · automation and scripting'
       ]
     },
     {
@@ -92,15 +92,15 @@
       keywords: ['experience', 'background', 'career', 'history', 'freelance', 'experiencia', 'trayectoria'],
       answer: 'Experience highlights:',
       items: [
-        'Community Leader — GeekClub (90+ member tech community)',
-        'Open Source Contributor — Oh My Bash (official documentation)',
-        'Developer · DevOps — Samsung Innovation Campus (AI/Python, version control, CI)',
+        'Community Leader · GeekClub (90+ member tech community)',
+        'Open Source Contributor · Oh My Bash (official documentation)',
+        'Developer · DevOps · Samsung Innovation Campus (AI/Python, version control, CI)',
         'Freelance Service Assistant (automated quotes and technical reports)'
       ]
     },
     {
       keywords: ['whoami', 'who are you', 'who is jose', 'about jose', 'introduce yourself', 'yourself', 'biography', 'sobre jose', 'quien es'],
-      answer: 'Jose M. Taveras is a Software Developer and DevOps from the Dominican Republic, studying at ITLA — "Automating infrastructure, building solutions, breaking barriers." He is also the Community Leader of GeekClub.'
+      answer: 'Jose M. Taveras is a Software Developer and DevOps from the Dominican Republic, studying at ITLA: "Automating infrastructure, building solutions, breaking barriers." He is also the Community Leader of GeekClub.'
     }
   ];
 
