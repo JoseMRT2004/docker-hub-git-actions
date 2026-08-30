@@ -131,6 +131,44 @@ def test_behavior_extracted_from_html():
     assert "Automating infrastructure..." in APP_JS
 
 
+# --- i18n ------------------------------------------------------------
+
+I18N_JS = (ROOT / "assets" / "js" / "i18n.js").read_text(encoding="utf-8")
+
+
+def test_i18n_module_exists_and_is_referenced():
+    assert (ROOT / "assets" / "js" / "i18n.js").is_file()
+    assert 'src="assets/js/i18n.js"' in HTML
+
+
+def test_i18n_is_browser_language_detection_not_a_button():
+    # This is a browser/system-language preference, not a translate button:
+    # there must be no language toggle in the markup, and the detection must
+    # read the browser language.
+    assert "lang-toggle" not in HTML
+    assert "navigator.language" in I18N_JS
+
+
+def test_i18n_uses_localstorage_persistence():
+    assert "localStorage" in I18N_JS
+
+
+def test_every_data_i18n_key_exists_in_en_and_es():
+    keys_in_html = set(re.findall(r'data-i18n="([^"]+)"', HTML))
+    assert keys_in_html, "expected at least one data-i18n key in the markup"
+    en_block = I18N_JS[I18N_JS.index("en: {"):I18N_JS.index("},")]
+    es_block = I18N_JS[I18N_JS.index("es: {"):I18N_JS.index("\n  };")]
+    for key in keys_in_html:
+        assert f"'{key}'" in en_block, f"missing EN translation for {key}"
+        assert f"'{key}'" in es_block, f"missing ES translation for {key}"
+
+
+def test_i18n_defaults_to_english_markup():
+    # The shipped (no-JS / default) content is English.
+    assert '<span class="section-label" data-i18n="nav.experience">experience</span>' in HTML
+    assert '<span class="section-label" data-i18n="nav.contact">contact</span>' in HTML
+
+
 def test_dom_balance():
     opens = HTML.count("<div")
     closes = HTML.count("</div>")
