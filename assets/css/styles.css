@@ -1024,17 +1024,22 @@
       transition: border-color 0.2s ease, box-shadow 0.25s ease, filter 0.3s ease;
     }
 
-    /* Hover "sun": the frame glows like the avatar pulse and the photo goes
-       gently soft (blur) with a subtle zoom. Quiet by default; only on hover. */
+    /* Hover "focus": when you hover the grid, every photo goes soft/blurred —
+       and the hovered one snaps back sharp (like a focus/magnifier), with the
+       avatar-like sun glow on its frame. Quiet in rest; only on grid hover. */
+    .posts-grid:hover .post-img {
+      filter: blur(4px);
+    }
+
+    .posts-grid:hover .post-item:hover .post-img {
+      filter: blur(0);
+      transform: scale(1.035);
+    }
+
     .post-item:hover .post-frame {
       border-color: var(--accent);
       box-shadow: 0 0 22px var(--accent-glow);
       animation: avatar-pulse 2.2s ease-in-out infinite;
-    }
-
-    .post-item:hover .post-img {
-      filter: blur(1.6px);
-      transform: scale(1.035);
     }
 
     .post-img {
