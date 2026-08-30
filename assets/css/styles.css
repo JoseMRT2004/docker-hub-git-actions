@@ -831,6 +831,34 @@
       color: var(--yellow);
     }
 
+    .chatbot-bullets {
+      flex-basis: 100%;
+      list-style: none;
+      margin: 4px 0 0 16px;
+      padding: 0;
+    }
+
+    .chatbot-bullets li {
+      position: relative;
+      font-size: 0.75rem;
+      line-height: 1.6;
+      color: var(--text);
+      padding-left: 14px;
+    }
+
+    /* Terminal-style bullet: a cyan prompt dot, matching the site's palette. */
+    .chatbot-bullets li::before {
+      content: '▹';
+      position: absolute;
+      left: 0;
+      color: var(--cyan);
+    }
+
+    .chatbot-bullets li strong {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
     .chatbot-msg-actions {
       flex-basis: 100%;
       margin-top: 4px;
@@ -954,7 +982,37 @@
 
     .post-item {
       margin: 0;
-      transition: transform 0.15s ease;
+    }
+
+    /* Entry: each post slides in from a direction (left / right / up) on
+       scroll, staggered per item. These override the generic .reveal state
+       because they are declared later in the sheet. */
+    .post-item--left {
+      transform: translateX(-36px);
+      opacity: 0;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease, filter 0.3s ease;
+    }
+
+    .post-item--right {
+      transform: translateX(36px);
+      opacity: 0;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease, filter 0.3s ease;
+    }
+
+    .post-item--up {
+      transform: translateY(34px);
+      opacity: 0;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.45s ease, filter 0.3s ease;
+    }
+
+    .post-item:nth-child(1) { transition-delay: 0.00s; }
+    .post-item:nth-child(2) { transition-delay: 0.12s; }
+    .post-item:nth-child(3) { transition-delay: 0.24s; }
+    .post-item:nth-child(4) { transition-delay: 0.36s; }
+
+    .post-item.visible {
+      transform: none;
+      opacity: 1;
     }
 
     .post-frame {
@@ -963,12 +1021,20 @@
       border: 1px solid var(--border);
       border-radius: 4px;
       background: var(--surface-2);
-      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      transition: border-color 0.2s ease, box-shadow 0.25s ease, filter 0.3s ease;
     }
 
+    /* Hover "sun": the frame glows like the avatar pulse and the photo goes
+       gently soft (blur) with a subtle zoom. Quiet by default; only on hover. */
     .post-item:hover .post-frame {
       border-color: var(--accent);
-      box-shadow: 0 0 18px var(--accent-glow);
+      box-shadow: 0 0 22px var(--accent-glow);
+      animation: avatar-pulse 2.2s ease-in-out infinite;
+    }
+
+    .post-item:hover .post-img {
+      filter: blur(1.6px);
+      transform: scale(1.035);
     }
 
     .post-img {
@@ -976,6 +1042,8 @@
       height: 100%;
       object-fit: cover;
       display: block;
+      transition: filter 0.3s ease, transform 0.3s ease;
+      will-change: filter;
     }
 
     /* Object positioning per image: center for landscape, keep the top

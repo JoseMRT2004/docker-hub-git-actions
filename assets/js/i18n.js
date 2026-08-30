@@ -38,8 +38,7 @@
       'posts.me-teaching': 'Teaching the campus',
       'posts.news-room': 'News room, Latinoamérica',
       'posts.semana-global': 'Global Entrepreneurship Week team',
-      'posts.sic-team': 'Samsung Innovation Campus team',
-      'posts.sic-working': 'Working with the SIC team'
+      'posts.sic-team': 'Samsung Innovation Campus team'
     },
     es: {
       'nav.skills': 'habilidades',
@@ -67,8 +66,7 @@
       'posts.me-teaching': 'Enseñando en el campus',
       'posts.news-room': 'Sala de prensa, Latinoamérica',
       'posts.semana-global': 'Equipo de la Semana Global del Emprendimiento',
-      'posts.sic-team': 'Equipo del Samsung Innovation Campus',
-      'posts.sic-working': 'Trabajando con el equipo del SIC'
+      'posts.sic-team': 'Equipo del Samsung Innovation Campus'
     }
   };
 
